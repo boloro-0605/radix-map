@@ -18,6 +18,12 @@ Artifact: https://claude.ai/code/artifact/1fceb6ad-8b4e-4fa5-96fc-8f6e231c0a3e
    дахин ажиллуулна, дараа нь:
    `python3 parse_result.py <tool-result-file> raw_rent.json`
 
+3б. **RE/MAX зар татах**: Browser tab-ыг https://www.remax.mn руу шилжүүлээд
+   `scrape_remax.js`-ийн агуулгыг javascript_tool-д ажиллуулна (нэг дор sale+rent татна), дараа нь:
+   `python3 parse_result.py <tool-result-file> raw_remax.json`
+   RE/MAX амжилтгүй бол (API өөрчлөгдсөн г.м.) хуучин raw_remax.json-г дарж бичилгүй үлдээж
+   болно — build.py байгаа файлаараа үргэлжилнэ.
+
 4. **HTML угсрах**: `python3 build.py` → `ub-realestate-map.html` үүсгэнэ
    (дата embed + огноо автоматаар шинэчлэгдэнэ). Мөн тухайн өдрийн медиан үзүүлэлтүүдийг
    `history.json`-д хуримтлуулж, трэнд график руу embed хийнэ — history.json-г хэзээ ч

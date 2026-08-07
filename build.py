@@ -128,11 +128,10 @@ def process_remax(raw):
             if year:
                 title += f", {year} он"
             title += ' — RE/MAX'
-            tx = 'худалдах' if mode == 's' else 'түрээслэх'
-            url = f"https://www.remax.mn/mn-mn/листингүүд/орон-сууц/{tx}/{city.lower()}/{mlsid}"
+            # 'u' нь зөвхөн MLSID — бүтэн URL-ийг template-ийн JS угсарна (хэмжээ хэмнэнэ)
             out.append({'d': city, 'nb': nb, 'lat': lat, 'lng': lng, 'x': exact,
                         'p': round(p, 2), 'a': a, 'r': int(rooms) if rooms else None,
-                        'ppm': ppm, 't': title, 'u': url, 'm': mode, 'src': 'x'})
+                        'ppm': ppm, 't': title, 'u': mlsid, 'm': mode, 'src': 'x'})
     return out
 
 

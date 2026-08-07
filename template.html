@@ -431,9 +431,12 @@ function renderMap(groups) {
   });
 }
 
+const listingUrl = l => l.src === 'x'
+  ? `https://www.remax.mn/mn-mn/листингүүд/орон-сууц/${l.m === 's' ? 'худалдах' : 'түрээслэх'}/${l.d.toLowerCase()}/${l.u}`
+  : l.u;
 const itemLi = l => `
   <li>
-    <p class="t"><a href="${l.u}" target="_blank" rel="noopener">${l.t}</a></p>
+    <p class="t"><a href="${listingUrl(l)}" target="_blank" rel="noopener">${l.t}</a></p>
     <div class="r"><span><b>${fmtPrice(l)}</b></span><span>${l.a} м²</span><span>${l.r ? l.r + ' өрөө' : ''}</span><span>${l.m==='s' ? l.ppm.toFixed(1) + ' сая ₮/м²' : Math.round(l.ppm) + ' мян ₮/м²·сар'}</span><span>${l.src==='x' ? 'remax.mn' : 'unegui.mn'}</span></div>
   </li>`;
 
