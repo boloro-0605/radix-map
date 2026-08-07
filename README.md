@@ -14,6 +14,13 @@ Artifact: https://claude.ai/code/artifact/1fceb6ad-8b4e-4fa5-96fc-8f6e231c0a3e
    замыг ашиглан:
    `python3 parse_result.py <tool-result-file> raw_sale.json`
 
+   ⚠️ **javascript_tool 30 секундэд timeout болдог**, scrape.js-ийг бүтнээр нь (12 хуудас)
+   нэг дуудалтад ажиллуулбал амжихгүй. Тиймээс: эхний дуудалтад `window.__CATS` толь ба
+   `window.__grab(kind, [дүүргүүд])` функцийг тодорхойлж, дараа нь **2 дүүрэг тутамд нэг
+   дуудалт** (3 дуудалт/төрөл) хийж `window.__S[kind]`-д хуримтлуулна. Эцэст нь
+   `JSON.stringify(window.__S.sale)` гэж буцаавал tool-result файлд хадгалагдана.
+   Фон дээр ажиллуулаад poll хийх арга бүтэхгүй — pane хаагдвал window state алга болно.
+
 3. **Түрээсийн зар татах**: scrape.js-ийн эхний мөрийг `const KIND = 'rent';` болгоод
    дахин ажиллуулна, дараа нь:
    `python3 parse_result.py <tool-result-file> raw_rent.json`
