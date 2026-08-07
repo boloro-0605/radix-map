@@ -167,6 +167,7 @@ def main():
     html = re.sub(r'\d{4}-\d{2}-\d{2}-ны түүвэр', date.today().isoformat() + '-ны түүвэр', html)
     out_path = os.path.join(BASE, 'ub-realestate-map.html')
     open(out_path, 'w').write(html)
+    open(os.path.join(BASE, 'index.html'), 'w').write(html)  # GitHub Pages-д зориулсан хуулбар
 
     ns = sum(1 for l in combined if l['m'] == 's')
     nr = len(combined) - ns
