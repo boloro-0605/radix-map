@@ -92,6 +92,50 @@ def coord_for(d, nb):
     return (base[0] + ((h % 100) - 50) * 0.0002, base[1] + (((h // 100) % 100) - 50) * 0.0005), False
 
 
+UB_DISTRICTS = set(DIST_MN.values())
+
+
+def process_remax(raw):
+    """RE/MAX API-ийн мөрүүд: [City, LocalZone, price, currency, area, rooms, [lng,lat], MLSID, year, granularity]"""
+    out = []
+    for key, mode in (('sale', 's'), ('rent', 'r')):
+        for city, zone, price, cur, area, rooms, coords, mlsid, year, _gran in raw.get(key, []):
+            if city not in UB_DISTRICTS or cur != 'MNT' or not price or not area:
+                continue
+            a = float(area)
+            p = price / 1e6  # сая ₮
+            if not (15 <= a <= 400):
+                continue
+            if mode == 's':
+                if p <= 10:
+                    continue
+                ppm = round(p / a, 2)
+                if not (1.0 < ppm < 20):
+                    continue
+            else:
+                if not (0.3 <= p <= 25):
+                    continue
+                ppm = round(p * 1000 / a, 1)
+                if not (10 <= ppm <= 120):
+                    continue
+            m = re.match(r'(\d+)-р хороо', zone or '')
+            nb = f'{city}, Хороо {m.group(1)}' if m else (zone or city)
+            if coords and 106.5 < coords[0] < 107.3 and 47.75 < coords[1] < 48.1:
+                lat, lng, exact = round(coords[1], 5), round(coords[0], 5), True
+            else:
+                (lat, lng), exact = coord_for({v: k for k, v in DIST_MN.items()}[city], nb)
+            title = f"{int(rooms)} өрөө, {a:g} м²" if rooms else f"{a:g} м²"
+            if year:
+                title += f", {year} он"
+            title += ' — RE/MAX'
+            tx = 'худалдах' if mode == 's' else 'түрээслэх'
+            url = f"https://www.remax.mn/mn-mn/листингүүд/орон-сууц/{tx}/{city.lower()}/{mlsid}"
+            out.append({'d': city, 'nb': nb, 'lat': lat, 'lng': lng, 'x': exact,
+                        'p': round(p, 2), 'a': a, 'r': int(rooms) if rooms else None,
+                        'ppm': ppm, 't': title, 'u': url, 'm': mode, 'src': 'x'})
+    return out
+
+
 def process(raw, mode):
     out = []
     for d, price, title, place, href in raw:
@@ -116,7 +160,7 @@ def process(raw, mode):
         (lat, lng), exact = coord_for(d, nb)
         out.append({'d': DIST_MN[d], 'nb': nb, 'lat': round(lat, 4), 'lng': round(lng, 4), 'x': exact,
                     'p': p, 'a': a, 'r': r, 'ppm': ppm, 't': title,
-                    'u': 'https://www.unegui.mn' + href, 'm': mode})
+                    'u': 'https://www.unegui.mn' + href, 'm': mode, 'src': 'u'})
     return out
 
 
@@ -156,6 +200,9 @@ def main():
     raw_sale = json.load(open(os.path.join(BASE, 'raw_sale.json')))
     raw_rent = json.load(open(os.path.join(BASE, 'raw_rent.json')))
     combined = process(raw_sale, 's') + process(raw_rent, 'r')
+    remax_path = os.path.join(BASE, 'raw_remax.json')
+    if os.path.exists(remax_path):
+        combined += process_remax(json.load(open(remax_path)))
     history = update_history(combined)
 
     tpl = open(os.path.join(BASE, 'template.html')).read()

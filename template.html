@@ -228,7 +228,7 @@ footer a { color: var(--accent); }
 <header>
   <div class="brand"><span class="wordmark">Rad<i>i</i>x</span><span class="props">Properties</span></div>
   <h1>Улаанбаатар — орон сууцны үнийн зураглал</h1>
-  <p class="sub">Худалдах, түрээслэх орон сууц ба түрээсийн өгөөж байршлаараа · эх сурвалж: <a href="https://www.unegui.mn/l-hdlh/" target="_blank" rel="noopener">unegui.mn</a> · 2026-08-05-ны түүвэр (төрөл, дүүрэг бүрийн сүүлийн ~120 зар)</p>
+  <p class="sub">Худалдах, түрээслэх орон сууц ба түрээсийн өгөөж байршлаараа · эх сурвалж: <a href="https://www.unegui.mn/l-hdlh/" target="_blank" rel="noopener">unegui.mn</a> + <a href="https://www.remax.mn" target="_blank" rel="noopener">remax.mn</a> · 2026-08-05-ны түүвэр</p>
 </header>
 
 <div class="stats" id="stats"></div>
@@ -294,9 +294,10 @@ footer a { color: var(--accent); }
 
 <footer>
   <span style="color: var(--brand); font-weight: 600">Radix Properties</span> — дата-д суурилсан үл хөдлөхийн зуучлал.
-  Байршил нь зарын «хороолол/хороо» талбарт үндэслэсэн ойролцоо цэг тул барилга тус бүрийн яг байрлал биш.
-  Үнэ, талбай нь зарын гарчгаас парс хийгдсэн; үнэлгээ хийх боломжгүй буюу хэт гажсан утгатай зарыг хассан
-  (худалдах 720 зараас 668, түрээсийн 720 зараас 633 нь орсон). Түрээсийн үнэ — сарын.
+  Дата нь unegui.mn (дүүрэг бүрийн сүүлийн зарууд, байршил нь хороолол түвшний ойролцоо цэг) болон
+  remax.mn (сүүлийн 90 хоногийн идэвхтэй зарууд, яг GPS байршилтай) сайтуудаас өдөр бүр татагддаг.
+  Хэт гажсан буюу үнэлгээ хийх боломжгүй утгатай зарыг хассан; хоёр сайтад давхар тавигдсан зар цөөн тохиолдолд
+  давхардаж тоологдож болзошгүй. Түрээсийн үнэ — сарын.
   Өгөөж нь тухайн байршилд зарагдаж буй болон түрээслүүлж буй өөр өөр байрнуудын медиан харьцаа тул
   баримжаа үзүүлэлт бөгөөд татвар, засвар, сул зогсолтыг тооцоогүй.
 </footer>
@@ -433,7 +434,7 @@ function renderMap(groups) {
 const itemLi = l => `
   <li>
     <p class="t"><a href="${l.u}" target="_blank" rel="noopener">${l.t}</a></p>
-    <div class="r"><span><b>${fmtPrice(l)}</b></span><span>${l.a} м²</span><span>${l.r ? l.r + ' өрөө' : ''}</span><span>${l.m==='s' ? l.ppm.toFixed(1) + ' сая ₮/м²' : Math.round(l.ppm) + ' мян ₮/м²·сар'}</span></div>
+    <div class="r"><span><b>${fmtPrice(l)}</b></span><span>${l.a} м²</span><span>${l.r ? l.r + ' өрөө' : ''}</span><span>${l.m==='s' ? l.ppm.toFixed(1) + ' сая ₮/м²' : Math.round(l.ppm) + ' мян ₮/м²·сар'}</span><span>${l.src==='x' ? 'remax.mn' : 'unegui.mn'}</span></div>
   </li>`;
 
 function showPanel(g) {
