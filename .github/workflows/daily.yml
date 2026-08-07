@@ -1,0 +1,33 @@
+name: daily-update
+
+on:
+  schedule:
+    # 12:10 UTC = 20:10 Улаанбаатар (UTC+8)
+    - cron: '10 12 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: RE/MAX дата татах
+        run: python3 remax_fetch.py
+        continue-on-error: true  # API унавал хуучин raw_remax.json-оор үргэлжилнэ
+
+      - name: Хуудас угсрах (unegui-ийн сүүлийн + RE/MAX-ийн шинэ дата)
+        run: python3 build.py
+
+      - name: Commit & push
+        run: |
+          git config user.name "radix-bot"
+          git config user.email "boloro-0605@users.noreply.github.com"
+          git add index.html history.json raw_remax.json raw_sale.json raw_rent.json
+          git diff --cached --quiet && echo "өөрчлөлт алга" && exit 0
+          git commit -m "Автомат шинэчлэлт $(date -u +%Y-%m-%d) (GitHub Actions)"
+          git pull --rebase origin main
+          git push

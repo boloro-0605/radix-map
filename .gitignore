@@ -2,8 +2,6 @@
 requests.json
 seen.json
 matches_report.md
-# Өдөр бүр дарж бичигддэг том түүхий файлууд
-raw_sale.json
-raw_rent.json
-listings_today.json
+# Локал давхардсан гаралт
 ub-realestate-map.html
+listings_today.json
