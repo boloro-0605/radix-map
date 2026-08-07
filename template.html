@@ -586,7 +586,7 @@ function renderTrend() {
   });
   svg.innerHTML = s;
   if (pts.length < 2) {
-    hint.textContent = `Трэнд дата хуримтлагдаж эхэллээ — одоогоор ${pts.length} өдрийн цэг байна. Өдөр бүр 09:00-д шинэ цэг нэмэгдэж, хэдхэн хоногийн дараа чиг хандлага харагдана.`;
+    hint.textContent = `Трэнд дата хуримтлагдаж эхэллээ — одоогоор ${pts.length} өдрийн цэг байна. Өдөр бүр орой шинэ цэг нэмэгдэж, хэдхэн хоногийн дараа чиг хандлага харагдана.`;
   } else {
     const first = pts[0].val, last = pts[pts.length - 1].val;
     const chg = ((last - first) / first * 100).toFixed(1);
