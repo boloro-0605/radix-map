@@ -1,0 +1,680 @@
+<title>Улаанбаатар — орон сууцны үнийн зураглал</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb;
+  --plane: #f7f7f4;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --accent: #2a78d6;
+  --brand: #0a205c;
+  --brand-accent: #e85e2b;
+  --river: #b7d3f6;
+  --road: #d8d7d0;
+  --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #104281;
+  --chip-bg: #efeeea;
+  --chip-on: #0b0b0b;
+  --chip-on-ink: #fcfcfb;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface: #1a1a19;
+    --plane: #111110;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --accent: #3987e5;
+    --brand: #93a7e8;
+    --brand-accent: #f0754a;
+    --river: #1c3a5e;
+    --road: #33332f;
+    --seq-1: #9ec5f4; --seq-2: #6da7ec; --seq-3: #3987e5; --seq-4: #256abf; --seq-5: #184f95;
+    --chip-bg: #262624;
+    --chip-on: #ffffff;
+    --chip-on-ink: #111110;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #1a1a19;
+  --plane: #111110;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255,255,255,0.10);
+  --accent: #3987e5;
+  --brand: #93a7e8;
+  --brand-accent: #f0754a;
+  --river: #1c3a5e;
+  --road: #33332f;
+  --seq-1: #9ec5f4; --seq-2: #6da7ec; --seq-3: #3987e5; --seq-4: #256abf; --seq-5: #184f95;
+  --chip-bg: #262624;
+  --chip-on: #ffffff;
+  --chip-on-ink: #111110;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface: #fcfcfb;
+  --plane: #f7f7f4;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --accent: #2a78d6;
+  --brand: #0a205c;
+  --brand-accent: #e85e2b;
+  --river: #b7d3f6;
+  --road: #d8d7d0;
+  --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #104281;
+  --chip-bg: #efeeea;
+  --chip-on: #0b0b0b;
+  --chip-on-ink: #fcfcfb;
+}
+
+body {
+  background: var(--plane);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0;
+  line-height: 1.45;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 48px; }
+
+.brand {
+  display: flex; align-items: baseline; gap: 8px; margin: 0 0 10px;
+  font-weight: 300; letter-spacing: 0.02em;
+}
+.brand .wordmark { font-size: 1.35rem; color: var(--brand); letter-spacing: 0.04em; }
+.brand .wordmark i { font-style: normal; color: var(--brand-accent); }
+.brand .props { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.22em; font-weight: 500; }
+header h1 { font-size: 1.55rem; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em; text-wrap: balance; }
+header .sub { color: var(--ink-2); font-size: 0.9rem; margin: 0; }
+header .sub a { color: var(--brand); text-decoration-color: var(--brand-accent); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 16px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 18px; min-width: 150px; flex: 0 1 auto;
+}
+.tile .v { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+.tile .v small { font-size: 0.85rem; font-weight: 500; color: var(--ink-2); }
+.tile .k { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+.valuer {
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--brand-accent);
+  border-radius: 10px; padding: 16px 18px; margin: 0 0 18px;
+}
+.valuer h2 { font-size: 1.05rem; margin: 0 0 4px; }
+.valuer .lead { font-size: 0.85rem; color: var(--ink-2); margin: 0 0 12px; max-width: 65ch; }
+.valuer .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.valuer .fld { display: flex; flex-direction: column; gap: 4px; }
+.valuer .fld label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.valuer select, .valuer input {
+  font: inherit; font-size: 0.88rem; color: var(--ink); background: var(--plane);
+  border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; min-width: 130px;
+}
+.valuer input { width: 90px; min-width: 90px; }
+.valuer .go {
+  font: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  background: var(--brand); color: var(--surface); border: none; border-radius: 7px; padding: 8px 18px;
+}
+.valuer .go:hover { opacity: 0.9; }
+.valuer .go:focus-visible { outline: 2px solid var(--brand-accent); outline-offset: 2px; }
+.vresult { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--grid); }
+.vresult .big { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.01em; }
+.vresult .big small { font-size: 0.9rem; font-weight: 500; color: var(--ink-2); }
+.vresult .det { font-size: 0.83rem; color: var(--ink-2); margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+.vresult .basis { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+.vcta {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px;
+  background: color-mix(in srgb, var(--brand) 6%, transparent); border-radius: 8px; padding: 10px 14px;
+}
+.vcta span { font-size: 0.85rem; color: var(--ink); }
+.vcta a {
+  font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+  background: var(--brand-accent); color: #fff; border-radius: 7px; padding: 7px 14px;
+}
+.vcta a:hover { opacity: 0.9; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+.filters .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filters .lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 2px; }
+.chip {
+  border: 1px solid var(--border); background: var(--chip-bg); color: var(--ink-2);
+  border-radius: 999px; padding: 4px 12px; font-size: 0.82rem; cursor: pointer; font-family: inherit;
+}
+.chip:hover { color: var(--ink); }
+.chip.on { background: var(--chip-on); color: var(--chip-on-ink); border-color: var(--chip-on); }
+.chip.on.mode { background: var(--brand); border-color: var(--brand); color: var(--surface); }
+.chip:focus-visible { outline: 2px solid var(--brand-accent); outline-offset: 2px; }
+.sep { width: 1px; align-self: stretch; background: var(--grid); margin: 0 6px; }
+
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
+
+.mapcard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.mapcard svg { display: block; width: 100%; height: auto; }
+.mapnote { padding: 8px 14px 0; font-size: 0.76rem; color: var(--muted); }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+  padding: 10px 14px; border-top: 1px solid var(--grid); font-size: 0.78rem; color: var(--ink-2);
+}
+.legend .bins { display: flex; align-items: center; gap: 0; }
+.legend .bin { width: 34px; height: 10px; }
+.legend .bin:first-child { border-radius: 3px 0 0 3px; }
+.legend .bin:last-child { border-radius: 0 3px 3px 0; }
+.legend .binlbl { display: flex; gap: 0; font-size: 0.7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend .binlbl span { width: 34px; text-align: right; }
+.legend .size { display: flex; align-items: center; gap: 6px; }
+.legend .size i { border: 1.5px solid var(--muted); border-radius: 50%; display: inline-block; }
+
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; max-height: 640px; overflow-y: auto; }
+.panel h2 { font-size: 0.95rem; margin: 0 0 2px; }
+.panel h3 { font-size: 0.78rem; margin: 12px 0 4px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.panel .meta { font-size: 0.78rem; color: var(--ink-2); margin-bottom: 10px; }
+.panel .meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.lst { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.lst li { padding: 9px 0; border-top: 1px solid var(--grid); }
+.lst li:first-child { border-top: none; }
+.lst .t { font-size: 0.82rem; margin: 0 0 3px; }
+.lst .t a { color: var(--ink); text-decoration: none; }
+.lst .t a:hover { color: var(--accent); text-decoration: underline; }
+.lst .r { display: flex; gap: 10px; font-size: 0.76rem; color: var(--ink-2); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+.lst .r b { color: var(--ink); font-weight: 600; }
+.hint { font-size: 0.78rem; color: var(--muted); }
+
+.dtable { margin-top: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+.dtable h2 { font-size: 0.95rem; margin: 14px 16px 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.83rem; }
+th, td { text-align: left; padding: 7px 16px; border-top: 1px solid var(--grid); white-space: nowrap; }
+th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; border-top: none; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+
+footer { margin-top: 18px; font-size: 0.76rem; color: var(--muted); max-width: 65ch; }
+footer a { color: var(--accent); }
+
+.tip {
+  position: fixed; pointer-events: none; z-index: 10; display: none;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18); padding: 8px 11px; font-size: 0.78rem; max-width: 260px;
+}
+.tip .n { font-weight: 600; margin-bottom: 2px; }
+.tip .d { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+.bub { cursor: pointer; stroke: var(--surface); stroke-width: 2; }
+.bub:hover { stroke: var(--ink); }
+.bub.sel { stroke: var(--ink); stroke-width: 2.5; }
+.map-lbl { font-size: 11px; fill: var(--ink-2); pointer-events: none; paint-order: stroke; stroke: var(--surface); stroke-width: 3; stroke-linejoin: round; }
+.dist-lbl { font-size: 12.5px; font-weight: 600; fill: var(--muted); opacity: 0.75; pointer-events: none; letter-spacing: 0.08em; }
+.lm-lbl { font-size: 10px; fill: var(--muted); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .bub { transition: r 0.15s ease; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="brand"><span class="wordmark">Rad<i>i</i>x</span><span class="props">Properties</span></div>
+  <h1>Улаанбаатар — орон сууцны үнийн зураглал</h1>
+  <p class="sub">Худалдах, түрээслэх орон сууц ба түрээсийн өгөөж байршлаараа · эх сурвалж: <a href="https://www.unegui.mn/l-hdlh/" target="_blank" rel="noopener">unegui.mn</a> · 2026-08-05-ны түүвэр (төрөл, дүүрэг бүрийн сүүлийн ~120 зар)</p>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="valuer">
+  <h2>💰 Байрныхаа үнийг мэдээрэй</h2>
+  <p class="lead">Байршил, талбайгаа оруулахад тухайн хорооллын бодит зарын дата дээр үндэслэн ойролцоо үнэлгээг шууд харуулна.</p>
+  <div class="row">
+    <div class="fld"><label for="vDist">Дүүрэг</label><select id="vDist"></select></div>
+    <div class="fld"><label for="vNb">Хороолол</label><select id="vNb"></select></div>
+    <div class="fld"><label for="vArea">Талбай, м²</label><input id="vArea" type="number" min="15" max="400" value="55" inputmode="decimal"></div>
+    <div class="fld"><label for="vRooms">Өрөө</label><select id="vRooms"><option value="">Хамаагүй</option><option>1</option><option>2</option><option>3</option><option>4</option><option value="5">5+</option></select></div>
+    <button class="go" id="vGo">Үнэлгээ харах</button>
+  </div>
+  <div class="vresult" id="vResult" hidden></div>
+</div>
+
+<div class="filters">
+  <div class="grp"><span class="lbl">Төрөл</span><span id="modeChips"></span></div>
+  <div class="sep"></div>
+  <div class="grp"><span class="lbl">Дүүрэг</span><span id="distChips"></span></div>
+  <div class="sep"></div>
+  <div class="grp"><span class="lbl">Өрөө</span><span id="roomChips"></span></div>
+</div>
+
+<div class="main">
+  <div class="mapcard">
+    <div class="mapnote" id="mapnote" hidden>Өгөөж = сарын түрээс × 12 ÷ худалдах үнэ. Худалдах болон түрээсийн тус бүр ≥3 зартай хороолол л харагдана.</div>
+    <svg id="map" viewBox="0 0 1000 605" role="img" aria-label="Улаанбаатар хотын орон сууцны зарын байршлын зураг"></svg>
+    <div class="legend">
+      <div>
+        <div class="bins" id="legendBins"></div>
+        <div class="binlbl" id="legendLbls"></div>
+      </div>
+      <span id="legendCap"></span>
+      <div class="size">
+        <i style="width:8px;height:8px"></i><i style="width:16px;height:16px"></i>
+        <span>зарын тоо</span>
+      </div>
+    </div>
+  </div>
+  <aside class="panel" id="panel">
+    <h2>Хороолол сонгоно уу</h2>
+    <p class="hint">Зураг дээрх дугуйг дарж тухайн байршлын заруудыг харна. Дугуйн хэмжээ — зарын тоо, өнгө — сонгосон үзүүлэлт.</p>
+  </aside>
+</div>
+
+<div class="dtable">
+  <h2>Дүүргээр — медиан үзүүлэлт</h2>
+  <table id="distTable">
+    <thead id="distHead"></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="dtable">
+  <h2 id="trendTitle">Үнийн трэнд</h2>
+  <div style="padding: 0 8px">
+    <svg id="trend" viewBox="0 0 1000 250" role="img" aria-label="Медиан үнийн өдөр тутмын өөрчлөлт"></svg>
+  </div>
+  <p class="hint" id="trendHint" style="padding: 0 16px 12px; margin: 0"></p>
+</div>
+
+<footer>
+  <span style="color: var(--brand); font-weight: 600">Radix Properties</span> — дата-д суурилсан үл хөдлөхийн зуучлал.
+  Байршил нь зарын «хороолол/хороо» талбарт үндэслэсэн ойролцоо цэг тул барилга тус бүрийн яг байрлал биш.
+  Үнэ, талбай нь зарын гарчгаас парс хийгдсэн; үнэлгээ хийх боломжгүй буюу хэт гажсан утгатай зарыг хассан
+  (худалдах 720 зараас 668, түрээсийн 720 зараас 633 нь орсон). Түрээсийн үнэ — сарын.
+  Өгөөж нь тухайн байршилд зарагдаж буй болон түрээслүүлж буй өөр өөр байрнуудын медиан харьцаа тул
+  баримжаа үзүүлэлт бөгөөд татвар, засвар, сул зогсолтыг тооцоогүй.
+</footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script src="data:text/javascript;base64,__DATA_B64__"></script>
+<script src="data:text/javascript;base64,__HISTORY_B64__"></script>
+<script>
+const $ = s => document.querySelector(s);
+const SEQ = ['--seq-1','--seq-2','--seq-3','--seq-4','--seq-5'];
+const MODES = {
+  s: { name: 'Худалдах', bins: [3.5, 4.5, 5.5, 7], binLbls: ['3.5','4.5','5.5','7+'],
+       cap: 'медиан үнэ, сая ₮/м²', ppmUnit: 'сая ₮/м²',
+       ppmFmt: v => v.toFixed(1), statPpm: 'Медиан үнэ (₮/м²)' },
+  r: { name: 'Түрээслэх', bins: [28, 34, 40, 48], binLbls: ['28','34','40','48+'],
+       cap: 'медиан түрээс, мянган ₮/м² сард', ppmUnit: 'мян ₮/м²·сар',
+       ppmFmt: v => Math.round(v), statPpm: 'Медиан түрээс (₮/м²·сар)' },
+  y: { name: 'Өгөөж %', bins: [7.5, 9, 10.5, 12], binLbls: ['7.5','9','10.5','12+'],
+       cap: 'жилийн түрээсийн өгөөж, %', ppmUnit: '%',
+       ppmFmt: v => v.toFixed(1), statPpm: 'Медиан өгөөж' },
+};
+
+// projection
+const LNG0 = 106.72, LNG1 = 107.06, LAT0 = 47.83, LAT1 = 47.968, W = 1000, H = 605;
+const px = lng => (lng - LNG0) / (LNG1 - LNG0) * W;
+const py = lat => (LAT1 - lat) / (LAT1 - LAT0) * H;
+const path = pts => pts.map((p, i) => (i ? 'L' : 'M') + px(p[1]).toFixed(1) + ' ' + py(p[0]).toFixed(1)).join(' ');
+
+const fmtMln = v => v >= 1000 ? (v/1000).toFixed(2) + ' тэрбум' : (v >= 10 ? Math.round(v) : v.toFixed(1)) + ' сая';
+const fmtPrice = l => l.m === 'r' ? fmtMln(l.p) + ' ₮/сар' : fmtMln(l.p) + ' ₮';
+const median = a => { const s = [...a].sort((x,y)=>x-y); const m = s.length>>1; return s.length%2 ? s[m] : (s[m-1]+s[m])/2; };
+const yieldOf = (salePpm, rentPpm) => rentPpm * 12 / (salePpm * 1000) * 100;
+
+const DISTS = ['Бүгд','Сүхбаатар','Хан-Уул','Баянзүрх','Баянгол','Сонгинохайрхан','Чингэлтэй'];
+const ROOMS = ['Бүгд','1','2','3','4','5+'];
+let fMode = 's', fDist = 'Бүгд', fRoom = 'Бүгд', selKey = null;
+const M = () => MODES[fMode];
+const seqColor = v => `var(${SEQ[M().bins.filter(b => v >= b).length]})`;
+
+function chips(el, items, get, set, cls) {
+  el.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    const val = Array.isArray(it) ? it[0] : it;
+    b.className = 'chip' + (cls ? ' ' + cls : '') + (get() === val ? ' on' : '');
+    b.textContent = Array.isArray(it) ? it[1] : it;
+    b.onclick = () => { set(val); render(); };
+    el.appendChild(b);
+  });
+}
+
+function filtered() {
+  return DATA.filter(l =>
+    (fMode === 'y' || l.m === fMode) &&
+    (fDist === 'Бүгд' || l.d === fDist) &&
+    (fRoom === 'Бүгд' || (fRoom === '5+' ? l.r >= 5 : l.r === +fRoom)));
+}
+
+function aggregate(rows) {
+  const m = new Map();
+  rows.forEach(l => {
+    const k = l.d + '|' + l.nb;
+    if (!m.has(k)) m.set(k, { key: k, d: l.d, nb: l.nb, lat: l.lat, lng: l.lng, items: [] });
+    m.get(k).items.push(l);
+  });
+  if (fMode !== 'y') {
+    return [...m.values()].map(g => ({
+      ...g, n: g.items.length,
+      val: median(g.items.map(i => i.ppm)),
+      price: median(g.items.map(i => i.p)),
+    })).sort((a, b) => b.n - a.n);
+  }
+  return [...m.values()].map(g => {
+    const sales = g.items.filter(i => i.m === 's'), rents = g.items.filter(i => i.m === 'r');
+    if (sales.length < 3 || rents.length < 3) return null;
+    const salePpm = median(sales.map(i => i.ppm)), rentPpm = median(rents.map(i => i.ppm));
+    return { ...g, n: g.items.length, nS: sales.length, nR: rents.length,
+             salePpm, rentPpm, sales, rents, val: yieldOf(salePpm, rentPpm) };
+  }).filter(Boolean).sort((a, b) => b.n - a.n);
+}
+
+function basemap() {
+  const river = [[47.900,107.06],[47.888,106.99],[47.889,106.95],[47.897,106.92],[47.898,106.90],[47.892,106.87],[47.885,106.83],[47.873,106.80],[47.862,106.77],[47.845,106.72]];
+  const peace = [[47.916,106.76],[47.918,106.83],[47.918,106.87],[47.9185,106.91],[47.921,106.94],[47.925,106.98],[47.928,107.03]];
+  const airport = [[47.912,106.90],[47.895,106.87],[47.885,106.85],[47.868,106.80],[47.855,106.77],[47.848,106.745]];
+  const chinggis = [[47.918,106.917],[47.9,106.9155],[47.886,106.9135]];
+  let s = `<rect width="${W}" height="${H}" fill="var(--surface)"/>`;
+  s += `<path d="${path(river)}" fill="none" stroke="var(--river)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`;
+  [peace, airport, chinggis].forEach(r => s += `<path d="${path(r)}" fill="none" stroke="var(--road)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
+  s += `<text class="lm-lbl" x="${px(106.752)}" y="${py(47.856)}">Туул гол</text>`;
+  s += `<rect x="${px(106.9177)-4}" y="${py(47.9187)-4}" width="8" height="8" fill="none" stroke="var(--muted)" stroke-width="1.5"/>`;
+  s += `<text class="lm-lbl" x="${px(106.9177)+7}" y="${py(47.9187)-6}">Сүхбаатарын талбай</text>`;
+  const dl = [['СОНГИНОХАЙРХАН',106.79,47.945],['ЧИНГЭЛТЭЙ',106.895,47.955],['СҮХБААТАР',106.938,47.955],['БАЯНЗҮРХ',107.0,47.945],['БАЯНГОЛ',106.845,47.898],['ХАН-УУЛ',106.83,47.878]];
+  dl.forEach(([n,lng,lat]) => s += `<text class="dist-lbl" x="${px(lng)}" y="${py(lat)}" text-anchor="middle">${n}</text>`);
+  return s;
+}
+
+const tip = $('#tip');
+function showTip(e, g) {
+  let body;
+  if (fMode === 'y') {
+    body = `${g.d} дүүрэг · ${g.nS}+${g.nR} зар<br>өгөөж <b>${g.val.toFixed(1)}%</b> · зарах ${g.salePpm.toFixed(1)} сая, түрээс ${Math.round(g.rentPpm)} мян ₮/м²`;
+  } else {
+    body = `${g.d} дүүрэг · ${g.n} зар<br>медиан <b>${M().ppmFmt(g.val)} ${M().ppmUnit}</b> · ${fmtMln(g.price)} ₮${fMode==='r'?'/сар':''}`;
+  }
+  tip.innerHTML = `<div class="n">${g.nb}</div><div class="d">${body}</div>`;
+  tip.style.display = 'block';
+  const x = Math.min(e.clientX + 14, innerWidth - 280), y = Math.min(e.clientY + 14, innerHeight - 90);
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+
+function renderMap(groups) {
+  const svg = $('#map');
+  const maxN = Math.max(...groups.map(g => g.n), 1);
+  const rad = n => 5 + 14 * Math.sqrt(n / maxN);
+  let s = basemap();
+  [...groups].sort((a,b) => b.n - a.n).forEach(g => {
+    s += `<circle class="bub${g.key===selKey?' sel':''}" data-k="${g.key}" cx="${px(g.lng).toFixed(1)}" cy="${py(g.lat).toFixed(1)}" r="${rad(g.n).toFixed(1)}" fill="${seqColor(g.val)}" fill-opacity="0.88"><title>${g.nb} — ${g.n} зар</title></circle>`;
+  });
+  groups.slice(0, 9).forEach(g => {
+    s += `<text class="map-lbl" x="${px(g.lng).toFixed(1)}" y="${(py(g.lat) - rad(g.n) - 4).toFixed(1)}" text-anchor="middle">${g.nb.replace(/^(Сүхбаатар|Хан-Уул|Баянзүрх|Баянгол|Сонгинохайрхан|Чингэлтэй), /, '')}</text>`;
+  });
+  svg.innerHTML = s;
+  svg.querySelectorAll('.bub').forEach(c => {
+    const g = groups.find(x => x.key === c.dataset.k);
+    c.addEventListener('mousemove', e => showTip(e, g));
+    c.addEventListener('mouseleave', () => tip.style.display = 'none');
+    c.addEventListener('click', () => { selKey = g.key; render(); showPanel(g); });
+  });
+}
+
+const itemLi = l => `
+  <li>
+    <p class="t"><a href="${l.u}" target="_blank" rel="noopener">${l.t}</a></p>
+    <div class="r"><span><b>${fmtPrice(l)}</b></span><span>${l.a} м²</span><span>${l.r ? l.r + ' өрөө' : ''}</span><span>${l.m==='s' ? l.ppm.toFixed(1) + ' сая ₮/м²' : Math.round(l.ppm) + ' мян ₮/м²·сар'}</span></div>
+  </li>`;
+
+function showPanel(g) {
+  const p = $('#panel');
+  if (fMode === 'y') {
+    const sales = [...g.sales].sort((a,b) => a.ppm - b.ppm), rents = [...g.rents].sort((a,b) => a.ppm - b.ppm);
+    p.innerHTML = `<h2>${g.nb}</h2>
+      <div class="meta">${g.d} дүүрэг · өгөөж <b>${g.val.toFixed(1)}%</b>/жил<br>
+      зарах медиан <b>${g.salePpm.toFixed(1)}</b> сая ₮/м² · түрээс <b>${Math.round(g.rentPpm)}</b> мян ₮/м²·сар</div>
+      <h3>Худалдах — ${g.nS} зар</h3><ul class="lst">${sales.map(itemLi).join('')}</ul>
+      <h3>Түрээслэх — ${g.nR} зар</h3><ul class="lst">${rents.map(itemLi).join('')}</ul>`;
+    return;
+  }
+  const items = [...g.items].sort((a, b) => a.ppm - b.ppm);
+  p.innerHTML = `<h2>${g.nb}</h2>
+    <div class="meta">${g.d} дүүрэг · <b>${g.n}</b> зар · медиан <b>${M().ppmFmt(g.val)}</b> ${M().ppmUnit}</div>
+    <ul class="lst">` + items.map(itemLi).join('') + '</ul>';
+}
+
+function distSummaries(rows) {
+  const byD = {};
+  rows.forEach(l => (byD[l.d] = byD[l.d] || []).push(l));
+  return Object.entries(byD).map(([d, v]) => {
+    if (fMode === 'y') {
+      const s = v.filter(x => x.m === 's').map(x => x.ppm), r = v.filter(x => x.m === 'r').map(x => x.ppm);
+      if (!s.length || !r.length) return null;
+      return { d, nS: s.length, nR: r.length, salePpm: median(s), rentPpm: median(r), val: yieldOf(median(s), median(r)) };
+    }
+    return { d, n: v.length, val: median(v.map(x => x.ppm)), p: median(v.map(x => x.p)), a: median(v.map(x => x.a)) };
+  }).filter(Boolean);
+}
+
+function renderStats(rows, groups) {
+  const dm = distSummaries(rows).sort((a, b) => a.val - b.val);
+  const lo = dm[0], hi = dm[dm.length - 1];
+  const u = M().ppmUnit;
+  if (fMode === 'y') {
+    const ys = groups.map(g => g.val);
+    $('#stats').innerHTML = `
+      <div class="tile"><div class="v">${groups.length}</div><div class="k">Хороолол (харьцуулалт)</div></div>
+      <div class="tile"><div class="v">${ys.length ? median(ys).toFixed(1) : '—'}<small> %/жил</small></div><div class="k">Медиан өгөөж</div></div>
+      ${hi ? `<div class="tile"><div class="v">${hi.val.toFixed(1)}<small> %</small></div><div class="k">Өндөр — ${hi.d}</div></div>` : ''}
+      ${lo && dm.length > 1 ? `<div class="tile"><div class="v">${lo.val.toFixed(1)}<small> %</small></div><div class="k">Бага — ${lo.d}</div></div>` : ''}`;
+    return;
+  }
+  const ppms = rows.map(l => l.ppm);
+  $('#stats').innerHTML = `
+    <div class="tile"><div class="v">${rows.length}</div><div class="k">Зар (түүвэрт)</div></div>
+    <div class="tile"><div class="v">${ppms.length ? M().ppmFmt(median(ppms)) : '—'}<small> ${u}</small></div><div class="k">${M().statPpm}</div></div>
+    ${lo ? `<div class="tile"><div class="v">${M().ppmFmt(lo.val)}<small> ${u}</small></div><div class="k">Хямд — ${lo.d}</div></div>` : ''}
+    ${hi && dm.length > 1 ? `<div class="tile"><div class="v">${M().ppmFmt(hi.val)}<small> ${u}</small></div><div class="k">Үнэтэй — ${hi.d}</div></div>` : ''}`;
+}
+
+function renderTable(rows) {
+  const head = $('#distHead'), tb = $('#distTable tbody');
+  if (fMode === 'y') {
+    head.innerHTML = '<tr><th>Дүүрэг</th><th class="num">Зар (зарах+түрээс)</th><th class="num">Зарах ₮/м²</th><th class="num">Түрээс ₮/м²·сар</th><th class="num">Өгөөж %/жил</th></tr>';
+    tb.innerHTML = distSummaries(rows).sort((a, b) => b.val - a.val)
+      .map(r => `<tr data-d="${r.d}"><td>${r.d}</td><td class="num">${r.nS}+${r.nR}</td><td class="num">${r.salePpm.toFixed(1)} сая</td><td class="num">${Math.round(r.rentPpm)} мян</td><td class="num">${r.val.toFixed(1)}%</td></tr>`).join('');
+  } else {
+    head.innerHTML = `<tr><th>Дүүрэг</th><th class="num">Зар</th><th class="num">${fMode==='s'?'Медиан ₮/м²':'Медиан ₮/м²·сар'}</th><th class="num">${fMode==='s'?'Медиан үнэ':'Медиан түрээс/сар'}</th><th class="num">Медиан талбай</th></tr>`;
+    tb.innerHTML = distSummaries(rows).sort((a, b) => b.n - a.n)
+      .map(r => `<tr data-d="${r.d}"><td>${r.d}</td><td class="num">${r.n}</td><td class="num">${M().ppmFmt(r.val)} ${fMode==='s'?'сая':'мян'}</td><td class="num">${fmtMln(r.p)} ₮${fMode==='r'?'/сар':''}</td><td class="num">${Math.round(r.a)} м²</td></tr>`).join('');
+  }
+  tb.querySelectorAll('tr').forEach(tr => tr.onclick = () => { fDist = tr.dataset.d; render(); });
+}
+
+function renderLegend() {
+  $('#legendBins').innerHTML = SEQ.map(c => `<div class="bin" style="background:var(${c})"></div>`).join('');
+  $('#legendLbls').innerHTML = M().binLbls.map(l => `<span>${l}</span>`).join('');
+  $('#legendCap').textContent = M().cap;
+}
+
+function trendSeries(scope) {
+  // scope: 'Бүгд' → city, эсвэл дүүргийн нэр. Буцаах: [{date, val}]
+  const pts = [];
+  (typeof HISTORY !== 'undefined' ? HISTORY : []).forEach(h => {
+    const pick = (m) => {
+      if (!h[m]) return null;
+      const rec = scope === 'Бүгд' ? h[m].city : h[m].dist[scope];
+      return rec ? rec[1] : null;
+    };
+    let v = null;
+    if (fMode === 'y') {
+      const s = pick('s'), r = pick('r');
+      if (s && r) v = r * 12 / (s * 1000) * 100;
+    } else {
+      v = pick(fMode);
+    }
+    if (v != null) pts.push({ date: h.date, val: v });
+  });
+  return pts;
+}
+
+function renderTrend() {
+  const svg = $('#trend'), hint = $('#trendHint');
+  const scope = fDist;
+  const unit = fMode === 'y' ? '%/жил' : M().ppmUnit;
+  $('#trendTitle').textContent = (fMode === 's' ? 'Худалдах үнийн трэнд' : fMode === 'r' ? 'Түрээсийн трэнд' : 'Өгөөжийн трэнд') +
+    (scope === 'Бүгд' ? ' — УБ нийт' : ' — ' + scope);
+  const pts = trendSeries(scope);
+  const TW = 1000, TH = 250, L = 70, R = 30, T = 20, B = 34;
+  let s = `<rect width="${TW}" height="${TH}" fill="var(--surface)"/>`;
+  if (pts.length === 0) {
+    svg.innerHTML = s;
+    hint.textContent = 'Энэ сонголтод трэнд дата алга.';
+    return;
+  }
+  const vals = pts.map(p => p.val);
+  let vMin = Math.min(...vals), vMax = Math.max(...vals);
+  const pad = Math.max((vMax - vMin) * 0.25, vMax * 0.03, 0.1);
+  vMin -= pad; vMax += pad;
+  const t0 = new Date(pts[0].date).getTime(), t1 = new Date(pts[pts.length - 1].date).getTime();
+  const tx = p => pts.length === 1 ? (L + (TW - L - R) / 2) : L + (new Date(p.date).getTime() - t0) / (t1 - t0) * (TW - L - R);
+  const ty = v => T + (vMax - v) / (vMax - vMin) * (TH - T - B);
+  const fmt = v => fMode === 'y' ? v.toFixed(1) : (fMode === 'r' ? Math.round(v) : v.toFixed(1));
+  // хэвтээ тор
+  for (let i = 0; i <= 3; i++) {
+    const v = vMin + (vMax - vMin) * i / 3, y = ty(v);
+    s += `<line x1="${L}" y1="${y.toFixed(1)}" x2="${TW - R}" y2="${y.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${L - 8}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(v)}</text>`;
+  }
+  // огнооны шошго
+  const dlbl = d => d.slice(5).replace('-', '/');
+  s += `<text x="${tx(pts[0]).toFixed(1)}" y="${TH - 12}" text-anchor="${pts.length === 1 ? 'middle' : 'start'}" font-size="11" fill="var(--muted)">${dlbl(pts[0].date)}</text>`;
+  if (pts.length > 1) s += `<text x="${tx(pts[pts.length - 1]).toFixed(1)}" y="${TH - 12}" text-anchor="end" font-size="11" fill="var(--muted)">${dlbl(pts[pts.length - 1].date)}</text>`;
+  // контекст: бусад дүүргүүд (Бүгд горимд, ≥2 цэгтэй үед)
+  if (scope === 'Бүгд' && pts.length > 1) {
+    ['Сүхбаатар','Хан-Уул','Баянзүрх','Баянгол','Сонгинохайрхан','Чингэлтэй'].forEach(d => {
+      const saved = fDist; fDist = d;
+      const dp = trendSeries(d); fDist = saved;
+      const inRange = dp.filter(p => p.val >= vMin && p.val <= vMax);
+      if (inRange.length > 1) {
+        s += `<path d="${inRange.map((p, i) => (i ? 'L' : 'M') + tx(p).toFixed(1) + ' ' + ty(p.val).toFixed(1)).join(' ')}" fill="none" stroke="var(--baseline)" stroke-width="1.5" opacity="0.6"/>`;
+      }
+    });
+  }
+  // үндсэн шугам
+  if (pts.length > 1) {
+    s += `<path d="${pts.map((p, i) => (i ? 'L' : 'M') + tx(p).toFixed(1) + ' ' + ty(p.val).toFixed(1)).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+  }
+  pts.forEach((p, i) => {
+    const last = i === pts.length - 1;
+    s += `<circle cx="${tx(p).toFixed(1)}" cy="${ty(p.val).toFixed(1)}" r="${last ? 4.5 : 3}" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"><title>${p.date}: ${fmt(p.val)} ${unit}</title></circle>`;
+    if (last) s += `<text x="${(tx(p) - 8).toFixed(1)}" y="${(ty(p.val) - 10).toFixed(1)}" text-anchor="end" font-size="12" font-weight="600" fill="var(--ink)" style="font-variant-numeric:tabular-nums">${fmt(p.val)} ${unit}</text>`;
+  });
+  svg.innerHTML = s;
+  if (pts.length < 2) {
+    hint.textContent = `Трэнд дата хуримтлагдаж эхэллээ — одоогоор ${pts.length} өдрийн цэг байна. Өдөр бүр 09:00-д шинэ цэг нэмэгдэж, хэдхэн хоногийн дараа чиг хандлага харагдана.`;
+  } else {
+    const first = pts[0].val, last = pts[pts.length - 1].val;
+    const chg = ((last - first) / first * 100).toFixed(1);
+    hint.textContent = `${pts.length} өдрийн дата · эхнийхээс ${chg >= 0 ? '+' : ''}${chg}% өөрчлөлт.` + (scope === 'Бүгд' ? ' Саарал шугамууд — дүүрэг тус бүр.' : '');
+  }
+}
+
+function render() {
+  chips($('#modeChips'), [['s','Худалдах'],['r','Түрээслэх'],['y','Өгөөж %']], () => fMode, v => { fMode = v; selKey = null; }, 'mode');
+  chips($('#distChips'), DISTS, () => fDist, v => { fDist = v; selKey = null; });
+  chips($('#roomChips'), ROOMS, () => fRoom, v => { fRoom = v; selKey = null; });
+  $('#mapnote').hidden = fMode !== 'y';
+  const rows = filtered();
+  const groups = aggregate(rows);
+  renderLegend();
+  renderStats(rows, groups);
+  renderMap(groups);
+  renderTable(rows);
+  renderTrend();
+}
+
+// ---- Байрны үнэлгээ ----
+const MESSENGER = 'https://m.me/100049124932532';
+
+function quart(sorted) {
+  const q = p => {
+    const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i);
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+  };
+  return [q(0.25), q(0.5), q(0.75)];
+}
+
+function valuerPool(mode, dist, nb, rooms) {
+  const all = DATA.filter(l => l.m === mode && l.d === dist);
+  let pool = all.filter(l => l.nb === nb);
+  let basis = nb;
+  if (rooms) {
+    const rp = pool.filter(l => rooms === 5 ? l.r >= 5 : l.r === rooms);
+    if (rp.length >= 5) { pool = rp; basis += `, ${rooms === 5 ? '5+' : rooms} өрөө`; }
+  }
+  if (pool.length < 3) { pool = all; basis = dist + ' дүүрэг'; }
+  return { pool, basis };
+}
+
+function initValuer() {
+  const dSel = $('#vDist'), nbSel = $('#vNb');
+  const dists = DISTS.slice(1);
+  dSel.innerHTML = dists.map(d => `<option>${d}</option>`).join('');
+  const fillNb = () => {
+    const cnt = {};
+    DATA.filter(l => l.d === dSel.value).forEach(l => cnt[l.nb] = (cnt[l.nb] || 0) + 1);
+    const nbs = Object.keys(cnt).sort((a, b) => a.localeCompare(b, 'mn', { numeric: true }));
+    nbSel.innerHTML = '<option value="">— Дүүргээр (хороолол харгалзахгүй) —</option>' +
+      nbs.map(nb => `<option>${nb}</option>`).join('');
+  };
+  dSel.onchange = fillNb;
+  fillNb();
+  $('#vGo').onclick = showValuation;
+}
+
+function showValuation() {
+  const dist = $('#vDist').value, nb = $('#vNb').value;
+  const area = parseFloat($('#vArea').value);
+  const rooms = $('#vRooms').value ? +$('#vRooms').value : null;
+  const box = $('#vResult');
+  box.hidden = false;
+  if (!area || area < 15 || area > 400) {
+    box.innerHTML = '<p class="det">Талбайгаа 15–400 м² хооронд оруулна уу.</p>';
+    return;
+  }
+  const { pool, basis } = valuerPool('s', dist, nb, rooms);
+  const ppms = pool.map(l => l.ppm).sort((a, b) => a - b);
+  const [q1, q2, q3] = quart(ppms);
+  const est = q2 * area, lo = q1 * area, hi = q3 * area;
+  const rentPool = valuerPool('r', dist, nb, rooms);
+  let rentLine = '';
+  if (rentPool.pool.length >= 3) {
+    const rq2 = quart(rentPool.pool.map(l => l.ppm).sort((a, b) => a - b))[1];
+    const rentEst = rq2 * area / 1000; // сая ₮/сар
+    const yld = rq2 * 12 / (q2 * 1000) * 100;
+    rentLine = `Түрээслүүлбэл сард ойролцоогоор <b>${rentEst.toFixed(1)} сая ₮</b> · түрээсийн өгөөж ~${yld.toFixed(1)}%/жил.<br>`;
+  }
+  box.innerHTML = `
+    <div class="big">≈ ${fmtMln(est)} ₮ <small>(${fmtMln(lo)} – ${fmtMln(hi)} ₮)</small></div>
+    <p class="det">${area} м² × медиан ${q2.toFixed(2)} сая ₮/м².<br>${rentLine}</p>
+    <div class="basis">Үндэслэл: ${basis} — идэвхтэй ${pool.length} зарын дата (${new Date().getFullYear()} он). Байрны давхар, засвар, барилгын оноос хамаарч бодит үнэ өөр байж болно.</div>
+    <div class="vcta">
+      <span><b>Зарах, худалдан авахдаа мэргэжлийн туслалцаа хэрэгтэй юу?</b><br>Radix Properties танд зах зээлийн бодит дата дээр үндэслэн зөвлөнө.</span>
+      <a href="${MESSENGER}" target="_blank" rel="noopener">💬 Messenger-ээр холбогдох</a>
+    </div>`;
+}
+
+initValuer();
+render();
+</script>
