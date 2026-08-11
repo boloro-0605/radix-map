@@ -202,6 +202,20 @@ def main():
     remax_path = os.path.join(BASE, 'raw_remax.json')
     if os.path.exists(remax_path):
         combined += process_remax(json.load(open(remax_path)))
+
+    # Давхардал арилгах: ижил төрөл+дүүрэг+талбай+үнэ+өрөө = нэг зар гэж үзнэ
+    # (шинэ хотхоны олон ижил айл, хоёр сайтад зэрэг тавьсан зар). GPS-тэй (remax)
+    # хувилбарыг нь үлдээнэ.
+    seen_sig, deduped = {}, []
+    for l in sorted(combined, key=lambda l: 0 if l['src'] == 'x' else 1):
+        sig = (l['m'], l['d'], round(l['a'], 1), round(l['p'], 1), l['r'])
+        if sig in seen_sig:
+            continue
+        seen_sig[sig] = True
+        deduped.append(l)
+    n_dropped = len(combined) - len(deduped)
+    combined = deduped
+
     history = update_history(combined)
 
     tpl = open(os.path.join(BASE, 'template.html')).read()
@@ -218,6 +232,7 @@ def main():
     ns = sum(1 for l in combined if l['m'] == 's')
     nr = len(combined) - ns
     print(f'OK: {out_path}')
+    print(f'давхардал арилгасан: {n_dropped} зар')
     print(f'түүх: {len(history)} өдрийн дата хуримтлагдсан')
     print(f'худалдах {ns} зар (raw {len(raw_sale)}), түрээс {nr} зар (raw {len(raw_rent)})')
     for mode, unit in (('s', 'сая ₮/м²'), ('r', 'мян ₮/м²·сар')):
