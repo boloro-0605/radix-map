@@ -1,40 +1,59 @@
 // unegui.mn-ээс зар татах — Browser pane-ийн javascript_tool дотор ажиллуулна.
-// ЧУХАЛ: эхлээд unegui.mn-ийг browser tab-д нээсэн байх ёстой (same-origin fetch ашигладаг).
-// KIND='sale' эсвэл KIND='rent' гэж эхний мөрийг сольж 2 удаа ажиллуулна.
-// Үр дүн нь том тул tool result файлд хадгалагдана — тэр файлыг README-ийн parse_result.py-аар боловсруулна.
+// ШААРДЛАГА: эхлээд unegui.mn-ийн аль нэг хуудас browser tab-д нээгдсэн байх (same-origin fetch).
+//
+// 2026-09 сайтын шинэчлэлтэд тохирсон хувилбар:
+//  - Дүүргийн URL-ууд найдваргүй болсон тул ерөнхий ангиллын хуудсуудаар татаж,
+//    дүүргийг зарын байршлын мөрөөс ("Улаанбаатар — Хан-Уул — Хүннү") гаргана.
+//  - Үнийг schema.org [itemprop=offers] элементээс авна (зурагны "1/15" тоолууртай
+//    наалдахаас сэргийлж) — textContent-ээс regex-ээр авч БОЛОХГҮЙ!
+//  - Гаралтын мөр: [дүүрэг(монголоор), үнэ, гарчиг, place, href]
+//    place формат хуучин хэвээр: "Дүүрэг, Дүүрэг, Хороо N" эсвэл "Дүүрэг, Хороолол"
+//
+// Хэрэглээ: KIND болон PAGES-ийг тохируулаад ажиллуулна. 30 сек timeout-д багтаахын
+// тулд нэг дуудалтад ~7 хуудас; шаардлагатай бол PAGES-ийг хувааж 2 дуудалт хийнэ.
 (async () => {
   const KIND = 'sale'; // 'sale' | 'rent'
-  const CATS = {
-    sale: {
-      'han-uul': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ub-hanuul/',
-      'bayanzurkh': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ub-bayanzrh/',
-      'bayangol': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ub-bayangol/',
-      'sukhbaatar': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ulan-bator/?cities=1',
-      'songinokhairkhan': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ub-songinohajrhan/',
-      'chingeltei': 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/ub-chingeltej/',
-    },
-    rent: {
-      'han-uul': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ub-hanuul/',
-      'bayanzurkh': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ub-bayanzrh/',
-      'bayangol': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ub-bayangol/',
-      'sukhbaatar': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ulan-bator/?cities=1',
-      'songinokhairkhan': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ub-songinohajrhan/',
-      'chingeltei': 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/ub-chingeltej/',
-    },
+  const PAGES = [1, 7]; // [эхлэх, дуусах] хуудас
+  const BASE = KIND === 'sale'
+    ? 'https://www.unegui.mn/l-hdlh/l-hdlh-zarna/oron-suuts-zarna/'
+    : 'https://www.unegui.mn/l-hdlh/l-hdlh-treesllne/oron-suuts/';
+
+  const parse = (doc) => {
+    const out = [], seen = new Set();
+    doc.querySelectorAll('li').forEach(li => {
+      const a = li.querySelector('a[href^="/adv/"]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (seen.has(href)) return;
+      const priceEl = li.querySelector('[itemprop="offers"] span, [itemprop="price"]');
+      const price = priceEl ? (priceEl.getAttribute('content') || priceEl.textContent).trim() : null;
+      if (!price || !/₮/.test(price)) return;
+      let locTxt = null;
+      for (const e of li.querySelectorAll('*')) {
+        const own = [...e.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join(' ').trim();
+        if (own.includes('Улаанбаатар —') && own.length < 130) { locTxt = own; break; }
+      }
+      if (!locTxt) return;
+      const lm = locTxt.match(/Улаанбаатар\s*—\s*([^—]+?)\s*—\s*(.+)$/);
+      if (!lm) return;
+      seen.add(href);
+      let title = '';
+      li.querySelectorAll('a[href^="/adv/"]').forEach(x => { const s = x.textContent.trim(); if (s.length > title.length) title = s; });
+      const dist = lm[1].trim(), nb = lm[2].trim();
+      const km = nb.match(/^(\d+)-р хороо/);
+      const place = km ? `${dist}, ${dist}, Хороо ${km[1]}` : `${dist}, ${nb}`;
+      out.push([dist, price, title.slice(0, 90), place, href.slice(0, 60)]);
+    });
+    return out;
   };
+
   const out = [];
-  for (const [d, base] of Object.entries(CATS[KIND])) {
-    for (let p = 1; p <= 2; p++) {
-      const url = p === 1 ? base : base + (base.includes('?') ? '&' : '?') + 'page=' + p;
-      const res = await fetch(url, { credentials: 'include' });
-      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-      doc.querySelectorAll('.advert.js-item-listing').forEach(ad => {
-        const g = s => (ad.querySelector(s)?.textContent || '').replace(/\s+/g, ' ').trim();
-        const href = ad.querySelector('a.advert__content-title')?.getAttribute('href') || '';
-        out.push([d, g('.advert__content-price span'), g('.advert__content-title').slice(0, 90), g('.advert__content-place'), href.slice(0, 60)]);
-      });
-      await new Promise(r => setTimeout(r, 400)); // сайтад ачаалал өгөхгүй
-    }
+  for (let p = PAGES[0]; p <= PAGES[1]; p++) {
+    const url = BASE + (p > 1 ? '?page=' + p : '');
+    const res = await fetch(url, { credentials: 'include' });
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    out.push(...parse(doc));
+    await new Promise(r => setTimeout(r, 200));
   }
   return JSON.stringify(out);
 })()

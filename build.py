@@ -135,9 +135,20 @@ def process_remax(raw):
     return out
 
 
+MN_TO_SLUG = {v: k for k, v in DIST_MN.items()}
+
+
 def process(raw, mode):
     out = []
     for d, price, title, place, href in raw:
+        # Дүүрэг латин slug ('han-uul') эсвэл монгол нэрээр ('Хан-Уул') ирж болно
+        if d in DIST_MN:
+            d_mn = DIST_MN[d]
+        elif d in MN_TO_SLUG:
+            d_mn = d
+            d = MN_TO_SLUG[d]
+        else:
+            continue  # УБ-ын 6 дүүргээс гаднах (Налайх г.м.)
         p = parse_price(price)
         a = parse_area(title)
         r = parse_rooms(title)
@@ -157,7 +168,7 @@ def process(raw, mode):
             if not (10 <= ppm <= 120):
                 continue
         (lat, lng), exact = coord_for(d, nb)
-        out.append({'d': DIST_MN[d], 'nb': nb, 'lat': round(lat, 4), 'lng': round(lng, 4), 'x': exact,
+        out.append({'d': d_mn, 'nb': nb, 'lat': round(lat, 4), 'lng': round(lng, 4), 'x': exact,
                     'p': p, 'a': a, 'r': r, 'ppm': ppm, 't': title,
                     'u': 'https://www.unegui.mn' + href, 'm': mode, 'src': 'u'})
     return out

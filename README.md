@@ -9,20 +9,16 @@ Artifact: https://claude.ai/code/artifact/1fceb6ad-8b4e-4fa5-96fc-8f6e231c0a3e
    `preview_start {url: "https://www.unegui.mn/l-hdlh/"}`). curl ажиллахгүй (403,
    Cloudflare) тул заавал browser доторх same-origin fetch ашиглана.
 
-2. **Худалдах зар татах**: `scrape.js`-ийн агуулгыг javascript_tool-д ажиллуулна
-   (KIND='sale' хэвээр). Үр дүн том тул tool-result файлд хадгалагдана — тэр файлын
-   замыг ашиглан:
-   `python3 parse_result.py <tool-result-file> raw_sale.json`
+2. **Худалдах зар татах** (2026-09 сайтын шинэчлэлтийн дараах журам): `scrape.js`-ийн
+   агуулгыг javascript_tool-д ажиллуулна. KIND='sale', PAGES=[1,7] → дараа нь PAGES=[8,14]
+   болгоод 2 дахь дуудалт (30 сек timeout-д багтаана). Хоёр үр дүнгийн tool-result
+   файлуудыг parse_result.py-аар нэгтгэнэ (хоёуланг нь парс хийж, href-ээр давхардал
+   арилгаж raw_sale.json-д нийлүүлнэ).
+   ⚠️ Дүүргийн URL (ub-hanuul г.м.) найдваргүй болсон — ерөнхий ангиллын хуудсаар татна.
+   ⚠️ Үнийг заавал [itemprop=offers]-оос авна — textContent regex нь зурагны "1/15"
+   тоолууртай наалдаж "155 сая" мэт худал үнэ гаргадаг!
 
-   ⚠️ **javascript_tool 30 секундэд timeout болдог**, scrape.js-ийг бүтнээр нь (12 хуудас)
-   нэг дуудалтад ажиллуулбал амжихгүй. Тиймээс: эхний дуудалтад `window.__CATS` толь ба
-   `window.__grab(kind, [дүүргүүд])` функцийг тодорхойлж, дараа нь **2 дүүрэг тутамд нэг
-   дуудалт** (3 дуудалт/төрөл) хийж `window.__S[kind]`-д хуримтлуулна. Эцэст нь
-   `JSON.stringify(window.__S.sale)` гэж буцаавал tool-result файлд хадгалагдана.
-   Фон дээр ажиллуулаад poll хийх арга бүтэхгүй — pane хаагдвал window state алга болно.
-
-3. **Түрээсийн зар татах**: scrape.js-ийн эхний мөрийг `const KIND = 'rent';` болгоод
-   дахин ажиллуулна, дараа нь:
+3. **Түрээсийн зар татах**: scrape.js-д KIND='rent', PAGES=[1,10] (нэг дуудалтад багтана):
    `python3 parse_result.py <tool-result-file> raw_rent.json`
 
 3б. **RE/MAX зар татах**: Browser tab-ыг https://www.remax.mn руу шилжүүлээд
