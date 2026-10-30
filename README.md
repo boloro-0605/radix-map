@@ -12,8 +12,9 @@ Artifact: https://claude.ai/code/artifact/1fceb6ad-8b4e-4fa5-96fc-8f6e231c0a3e
 2. **Худалдах зар татах** (2026-09 сайтын шинэчлэлтийн дараах журам): `scrape.js`-ийн
    агуулгыг javascript_tool-д ажиллуулна. KIND='sale', PAGES=[1,7] → дараа нь PAGES=[8,14]
    болгоод 2 дахь дуудалт (30 сек timeout-д багтаана). Хоёр үр дүнгийн tool-result
-   файлуудыг parse_result.py-аар нэгтгэнэ (хоёуланг нь парс хийж, href-ээр давхардал
-   арилгаж raw_sale.json-д нийлүүлнэ).
+   файлыг parse_result.py-д зэрэг дамжуулна — href-ээр давхардал арилгаад нэг файлд
+   нийлүүлнэ (сүүлийн аргумент нь гаралт):
+   `python3 parse_result.py <tool-result-1> <tool-result-2> raw_sale.json`
    ⚠️ Дүүргийн URL (ub-hanuul г.м.) найдваргүй болсон — ерөнхий ангиллын хуудсаар татна.
    ⚠️ Үнийг заавал [itemprop=offers]-оос авна — textContent regex нь зурагны "1/15"
    тоолууртай наалдаж "155 сая" мэт худал үнэ гаргадаг!
